@@ -1,0 +1,40 @@
+// sample mock data
+export default [
+  {
+    id: '1',
+    category: 'Politics',
+    title: 'Breaking: Global Climate Summit Reaches Historic Agreement',
+    excerpt: 'World leaders unite to sign the most comprehensive climate action plan in history — setting ambitious targets for emissions, finance and adaptation.',
+    tags: ['Climate', 'International', 'Environment'],
+    author: 'Sarah John',
+    date: 'Dec 15, 2024',
+    readTime: '5 min read',
+    image: require('../../assets/images/heroSection.png'),
+    views: 15420,
+  },
+  
+  {
+    id: '2',
+    category: 'Technology',
+    title: 'New AI Model Transforms Mobile Photo Editing',
+    excerpt: 'A compact neural model brings desktop-level editing tools to mobile devices with near real-time performance.',
+    tags: ['AI', 'Mobile', 'Tech'],
+    author: 'Alex Kim',
+    date: 'Dec 12, 2024',
+    readTime: '3 min read',
+    image: require('../../assets/images/icon.png'),
+    views: 8320,
+  },  
+  {
+    id: '3',
+    category: 'Sports',
+    title: 'Local Team Wins National Championship',
+    excerpt: 'An incredible comeback in the final quarter secures the team’s first title in over a decade.',
+    tags: ['Sports', 'Championship'],
+    author: 'Priya Singh',
+    date: 'Nov 30, 2024',
+    readTime: '4 min read',
+    image: require('../../assets/images/avatar.jpg'),
+    views: 6400,
+  },
+];

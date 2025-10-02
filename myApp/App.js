@@ -1,12 +1,17 @@
-import "nativewind";
-import { View, Text } from "react-native";
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Navigation from './src/navigation/navigate.js';
+import { StatusBar } from 'expo-status-bar';
 
 export default function App() {
   return (
-    <View className="flex-1 items-center justify-center bg-blue-100">
-      <Text className="text-xl font-bold text-blue-700">
-        Expo Web + Tailwind ✅
-      </Text>
-    </View>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Navigation />
+      </NavigationContainer>
+      <StatusBar style="auto" />
+    </SafeAreaProvider>
+
   );
 }
