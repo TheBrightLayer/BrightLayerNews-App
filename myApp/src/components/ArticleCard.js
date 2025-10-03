@@ -1,36 +1,148 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import ReadBadge from './ReadBadge';
+// src/components/ArticleCard.js
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 
-export default function ArticleCard({ item }) {
-  const navigation = useNavigation();
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const HORIZONTAL_PADDING = 24; // should match HomeScreen card padding
+const CARD_WIDTH = SCREEN_WIDTH - HORIZONTAL_PADDING;
+
+export default function ArticleCard({ article, onPress }) {
+  const { title, summary, image, source, publishedAt, category } = article || {};
+  const [imgHeight, setImgHeight] = useState(180); // default height
+  const [hasImage, setHasImage] = useState(Boolean(image));
+
+  useEffect(() => {
+    let mounted = true;
+    if (image) {
+      Image.getSize(
+        image,
+        (w, h) => {
+          if (!mounted) return;
+          // compute height to preserve aspect ratio
+          const width = CARD_WIDTH;
+          const height = Math.round((h / w) * width);
+          // limit height to reasonable max so cards don't get huge
+          const max = 360;
+          setImgHeight(Math.min(height, max));
+          setHasImage(true);
+        },
+        (err) => {
+          // couldn't get size -> fallback to placeholder
+          setHasImage(false);
+        }
+      );
+    } else {
+      setHasImage(false);
+    }
+    return () => (mounted = false);
+  }, [image]);
+
+  const date = publishedAt ? new Date(publishedAt).toLocaleDateString() : '';
 
   return (
-    <TouchableOpacity
-      onPress={() => navigation.navigate('Article', { article: item })}
-      className="mb-4"
-    >
-      <View className="rounded-lg overflow-hidden bg-white shadow">
-        <Image source={item.image} style={{ width: '100%', height: 180 }} resizeMode="cover" />
-        <View className="p-4">
-          <View className="absolute top-3 left-3 bg-purple-600 px-2 py-1 rounded-full">
-            <Text className="text-white text-xs">{item.category}</Text>
-          </View>
+    <TouchableOpacity onPress={() => onPress && onPress(article)} style={styles.card}>
+      {hasImage ? (
+        <Image source={{ uri: image }} style={[styles.image, { height: imgHeight }]} resizeMode="cover" />
+      ) : (
+        <View style={[styles.image, styles.placeholder]}>
+          <Text style={styles.placeholderText}>No image available</Text>
+        </View>
+      )}
 
-          <View className="flex-row justify-between items-center mb-2 mt-16">
-            <Text className="text-lg font-semibold flex-1">{item.title}</Text>
-            <ReadBadge text={item.readTime} />
-          </View>
+      {category ? (
+        <View style={styles.categoryBadge}>
+          <Text style={styles.categoryText}>{category}</Text>
+        </View>
+      ) : null}
 
-          <Text className="text-gray-500 text-sm mb-3">{item.excerpt}</Text>
+      <View style={styles.content}>
+        <Text style={styles.title} numberOfLines={2}>
+          {title}
+        </Text>
+        {summary ? (
+          <Text style={styles.summary} numberOfLines={3}>
+            {summary.replace(/<[^>]*>/g, '')}
+          </Text>
+        ) : null}
 
-          <View className="flex-row items-center justify-between">
-            <Text className="text-sm text-gray-600">{item.author} • {item.date}</Text>
-            <Text className="text-sm text-gray-500">{item.views.toLocaleString()} views</Text>
-          </View>
+        <View style={styles.metaRow}>
+          <Text style={styles.source}>{source ?? 'WorldNews'}</Text>
+          <Text style={styles.dot}> • </Text>
+          <Text style={styles.date}>{date}</Text>
         </View>
       </View>
     </TouchableOpacity>
   );
 }
+
+const styles = StyleSheet.create({
+  card: {
+    marginHorizontal: HORIZONTAL_PADDING / 2,
+    marginBottom: 14,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    overflow: 'hidden',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 3 },
+  },
+  image: {
+    width: CARD_WIDTH,
+    height: 180,
+    backgroundColor: '#eceff1',
+  },
+  placeholder: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  placeholderText: {
+    color: '#777',
+  },
+  categoryBadge: {
+    position: 'absolute',
+    left: 14,
+    top: 12,
+    backgroundColor: '#0f62fe',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  categoryText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  content: {
+    padding: 12,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: '700',
+    marginBottom: 8,
+    color: '#111',
+  },
+  summary: {
+    color: '#444',
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 10,
+  },
+  metaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  source: {
+    fontSize: 12,
+    color: '#666',
+  },
+  dot: {
+    color: '#666',
+    marginHorizontal: 4,
+  },
+  date: {
+    fontSize: 12,
+    color: '#666',
+  },
+});

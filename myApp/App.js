@@ -1,17 +1,7 @@
+// App.js
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Navigation from './src/navigation/navigate.js';
-import { StatusBar } from 'expo-status-bar';
+import HomeScreen from './src/screens/HomeScreen';
 
 export default function App() {
-  return (
-    <SafeAreaProvider>
-      <NavigationContainer>
-        <Navigation />
-      </NavigationContainer>
-      <StatusBar style="auto" />
-    </SafeAreaProvider>
-
-  );
+  return <HomeScreen />;
 }

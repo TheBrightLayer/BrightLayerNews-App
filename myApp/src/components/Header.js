@@ -1,19 +1,44 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-export default function Header({ onSearchPress, onMenuPress }) {
+export default function Header({ title = 'FlipNews', onMenuPress = () => {}, onSearchPress = () => {} }) {
   return (
-    <View className="flex-row items-center justify-between px-4 py-3 bg-white">
-      <Text className="text-2xl font-bold">FlipNews</Text>
-      <View className="flex-row items-center space-x-3">
-        <TouchableOpacity onPress={onSearchPress} accessibilityLabel="Search">
-          <MaterialIcons name="search" size={22} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onMenuPress} accessibilityLabel="Menu">
-          <MaterialIcons name="menu" size={22} />
-        </TouchableOpacity>
-      </View>
+    <View style={styles.container}>
+      <TouchableOpacity onPress={onMenuPress} style={styles.iconWrap}>
+        <Text style={styles.icon}>☰</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.title}>{title}</Text>
+
+      <TouchableOpacity onPress={onSearchPress} style={styles.iconWrap}>
+        <Text style={styles.icon}>🔍</Text>
+      </TouchableOpacity>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    height: 56,
+    paddingHorizontal: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#eee',
+    backgroundColor: '#fff',
+  },
+  iconWrap: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  icon: {
+    fontSize: 20,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '700',
+  },
+});

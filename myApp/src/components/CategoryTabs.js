@@ -1,22 +1,53 @@
-import React, { useState } from 'react';
-import { ScrollView, TouchableOpacity, Text } from 'react-native';
+// src/components/CategoryTabs.js
+import React from 'react';
+import { View, TouchableOpacity, Text, FlatList, StyleSheet } from 'react-native';
 
-const categories = ['All', 'Politics', 'Technology', 'Sports', 'Business', 'Entertainment'];
-
-export default function CategoryTabs({ onSelect }) {
-  const [active, setActive] = useState('All');
-
+export default function CategoryTabs({ categories = [], selected, onSelect }) {
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} className="py-3 px-4">
-      {categories.map(cat => (
-        <TouchableOpacity
-          key={cat}
-          onPress={() => { setActive(cat); onSelect && onSelect(cat); }}
-          className={`mr-3 px-3 py-2 rounded-full ${active === cat ? 'bg-black' : 'bg-gray-200'}`}
-        >
-          <Text className={`${active === cat ? 'text-white' : 'text-black'} text-sm`}>{cat}</Text>
-        </TouchableOpacity>
-      ))}
-    </ScrollView>
+    <View style={styles.wrap}>
+      <FlatList
+        horizontal
+        data={categories}
+        keyExtractor={(c) => c}
+        showsHorizontalScrollIndicator={false}
+        renderItem={({ item }) => {
+          const active = item === selected;
+          return (
+            <TouchableOpacity onPress={() => onSelect(item)} style={[styles.tab, active && styles.tabActive]}>
+              <Text style={[styles.tabText, active && styles.tabTextActive]}>{item}</Text>
+            </TouchableOpacity>
+          );
+        }}
+      />
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  wrap: {
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    backgroundColor: '#fff',
+  },
+  tab: {
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+    backgroundColor: '#f4f4f6',
+    marginRight: 10,
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  tabActive: {
+    backgroundColor: '#0f62fe22',
+    borderColor: '#0f62fe50',
+  },
+  tabText: {
+    fontSize: 14,
+    color: '#222',
+  },
+  tabTextActive: {
+    color: '#0f62fe',
+    fontWeight: '600',
+  },
+});
