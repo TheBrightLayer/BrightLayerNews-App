@@ -1,44 +1,26 @@
+// src/components/Header.js
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 
-export default function Header({ title = 'FlipNews', onMenuPress = () => {}, onSearchPress = () => {} }) {
+export default function Header({
+  title = 'FlipNews',
+  onMenuPress = () => {},
+  onSearchPress = () => {},
+}) {
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={onMenuPress} style={styles.iconWrap}>
-        <Text style={styles.icon}>☰</Text>
+    <View className="h-14 px-3 flex-row items-center justify-between border-b border-gray-200 bg-white">
+      {/* Menu button */}
+      <TouchableOpacity onPress={onMenuPress} className="w-10 h-10 items-center justify-center">
+        <Text className="text-xl">☰</Text>
       </TouchableOpacity>
 
-      <Text style={styles.title}>{title}</Text>
+      {/* Title */}
+      <Text className="text-lg font-bold text-gray-900">{title}</Text>
 
-      <TouchableOpacity onPress={onSearchPress} style={styles.iconWrap}>
-        <Text style={styles.icon}>🔍</Text>
+      {/* Search button */}
+      <TouchableOpacity onPress={onSearchPress} className="w-10 h-10 items-center justify-center">
+        <Text className="text-xl">🔍</Text>
       </TouchableOpacity>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    height: 56,
-    paddingHorizontal: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#eee',
-    backgroundColor: '#fff',
-  },
-  iconWrap: {
-    width: 40,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  icon: {
-    fontSize: 20,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: '700',
-  },
-});

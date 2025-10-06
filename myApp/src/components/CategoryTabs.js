@@ -1,10 +1,10 @@
 // src/components/CategoryTabs.js
 import React from 'react';
-import { View, TouchableOpacity, Text, FlatList, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text, FlatList } from 'react-native';
 
 export default function CategoryTabs({ categories = [], selected, onSelect }) {
   return (
-    <View style={styles.wrap}>
+    <View className="py-2.5 px-3 bg-white">
       <FlatList
         horizontal
         data={categories}
@@ -13,8 +13,22 @@ export default function CategoryTabs({ categories = [], selected, onSelect }) {
         renderItem={({ item }) => {
           const active = item === selected;
           return (
-            <TouchableOpacity onPress={() => onSelect(item)} style={[styles.tab, active && styles.tabActive]}>
-              <Text style={[styles.tabText, active && styles.tabTextActive]}>{item}</Text>
+            <TouchableOpacity
+              onPress={() => onSelect(item)}
+              className={`px-4 py-2 rounded-full mr-2 border ${
+                active
+                  ? 'bg-blue-100 border-blue-300'
+                  : 'bg-gray-100 border-transparent'
+              }`}
+              activeOpacity={0.85}
+            >
+              <Text
+                className={`text-sm ${
+                  active ? 'text-blue-600 font-semibold' : 'text-gray-800'
+                }`}
+              >
+                {item}
+              </Text>
             </TouchableOpacity>
           );
         }}
@@ -22,32 +36,3 @@ export default function CategoryTabs({ categories = [], selected, onSelect }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  wrap: {
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    backgroundColor: '#fff',
-  },
-  tab: {
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    borderRadius: 20,
-    backgroundColor: '#f4f4f6',
-    marginRight: 10,
-    borderWidth: 1,
-    borderColor: 'transparent',
-  },
-  tabActive: {
-    backgroundColor: '#0f62fe22',
-    borderColor: '#0f62fe50',
-  },
-  tabText: {
-    fontSize: 14,
-    color: '#222',
-  },
-  tabTextActive: {
-    color: '#0f62fe',
-    fontWeight: '600',
-  },
-});

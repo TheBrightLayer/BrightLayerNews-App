@@ -1,6 +1,14 @@
 // src/screens/HomeScreen.js
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, TextInput, SafeAreaView, FlatList, ActivityIndicator, StyleSheet, Text, Linking } from 'react-native';
+import {
+  View,
+  TextInput,
+  SafeAreaView,
+  FlatList,
+  ActivityIndicator,
+  Text,
+  Linking,
+} from 'react-native';
 import Header from '../components/Header';
 import CategoryTabs from '../components/CategoryTabs';
 import ArticleCard from '../components/ArticleCard';
@@ -21,28 +29,30 @@ export default function HomeScreen() {
   const [selectedArticle, setSelectedArticle] = useState(null);
   const PAGE_SIZE = 20;
 
-  const load = useCallback(async ({ reset = true, q = query, cat = category, offs = 0 } = {}) => {
-    try {
-      if (reset) setLoading(true);
-      const text = cat && cat !== 'All' ? cat.toLowerCase() : q || 'technology';
-      const data = await fetchWorldNews({ text, offset: offs, pageSize: PAGE_SIZE });
-      if (reset) setItems(data);
-      else setItems((prev) => [...prev, ...data]);
-      setOffset(offs + (data?.length || 0));
-    } catch (e) {
-      console.warn('Load error', e);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  }, [category, query]);
+  const load = useCallback(
+    async ({ reset = true, q = query, cat = category, offs = 0 } = {}) => {
+      try {
+        if (reset) setLoading(true);
+        const text = cat && cat !== 'All' ? cat.toLowerCase() : q || 'technology';
+        const data = await fetchWorldNews({ text, offset: offs, pageSize: PAGE_SIZE });
+        if (reset) setItems(data);
+        else setItems((prev) => [...prev, ...data]);
+        setOffset(offs + (data?.length || 0));
+      } catch (e) {
+        console.warn('Load error', e);
+      } finally {
+        setLoading(false);
+        setRefreshing(false);
+      }
+    },
+    [category, query]
+  );
 
   useEffect(() => {
     load({ reset: true, offs: 0 });
   }, []);
 
   useEffect(() => {
-    // when category changes, refetch
     load({ reset: true, offs: 0 });
   }, [category]);
 
@@ -60,21 +70,17 @@ export default function HomeScreen() {
     setMenuOpen(true);
   }
   function onNavigateFromMenu(id) {
-    // handle menu option taps
     if (id === 'trending') {
-      // example: set category to 'All' and sort by recency by refetching query
       setCategory('All');
       setQuery('');
       load({ reset: true, q: '', cat: 'All', offs: 0 });
     } else if (id === 'news') {
       setCategory('All');
     } else if (id === 'bookmarks') {
-      // placeholder
       alert('Bookmarks tapped (implement your bookmarks screen)');
     } else if (id === 'dark') {
       alert('Toggle dark mode - implement as needed');
     } else {
-      // generic feedback
       alert(`Menu: ${id}`);
     }
   }
@@ -88,26 +94,29 @@ export default function HomeScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView className="flex-1 bg-white">
       <Header onMenuPress={onMenuPress} />
 
-      <View style={styles.searchWrap}>
+      {/* Search */}
+      <View className="px-3 py-2 bg-white border-b border-gray-200">
         <TextInput
           placeholder="Search articles, authors, topics..."
           value={query}
           onChangeText={setQuery}
           onSubmitEditing={() => load({ reset: true, q: query, offs: 0 })}
-          style={styles.search}
+          className="h-10 bg-gray-100 rounded-lg px-3"
           returnKeyType="search"
         />
       </View>
 
+      {/* Categories */}
       <CategoryTabs categories={DEFAULT_CATEGORIES} selected={category} onSelect={setCategory} />
 
+      {/* Loading state when no items */}
       {loading && items.length === 0 ? (
-        <View style={styles.center}>
+        <View className="flex-1 items-center justify-center">
           <ActivityIndicator />
-          <Text style={{ marginTop: 8 }}>Loading news…</Text>
+          <Text className="mt-2">Loading news…</Text>
         </View>
       ) : (
         <FlatList
@@ -130,24 +139,3 @@ export default function HomeScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  searchWrap: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    backgroundColor: '#fff',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#eee',
-  },
-  search: {
-    height: 40,
-    backgroundColor: '#f3f4f6',
-    borderRadius: 10,
-    paddingHorizontal: 12,
-  },
-  center: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

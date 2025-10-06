@@ -1,6 +1,6 @@
 // src/components/SideMenu.js
 import React, { useEffect, useRef } from 'react';
-import { Animated, StyleSheet, View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { Animated, View, Text, TouchableOpacity, Dimensions } from 'react-native';
 
 const { width } = Dimensions.get('window');
 const MENU_WIDTH = Math.round(width * 0.78);
@@ -14,7 +14,7 @@ export default function SideMenu({ visible, onClose, onNavigate }) {
       duration: 260,
       useNativeDriver: true,
     }).start();
-  }, [visible]);
+  }, [visible, anim]);
 
   const items = [
     { id: 'news', label: 'News Feed' },
@@ -29,28 +29,41 @@ export default function SideMenu({ visible, onClose, onNavigate }) {
   ];
 
   return (
-    <View style={styles.root} pointerEvents="box-none">
+    <View className="absolute inset-0 z-50" pointerEvents="box-none">
       {/* overlay */}
       {visible ? (
-        <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={onClose} />
+        <TouchableOpacity
+          className="absolute inset-0 bg-black/40"
+          activeOpacity={1}
+          onPress={onClose}
+        />
       ) : null}
 
-      <Animated.View style={[styles.menu, { transform: [{ translateX: anim }] }]}>
-        <View style={styles.header}>
-          <Text style={styles.brand}>FlipNews</Text>
+      <Animated.View
+        style={[
+          {
+            width: MENU_WIDTH,
+            transform: [{ translateX: anim }],
+          },
+        ]}
+        className="absolute left-0 top-0 bottom-0 bg-white pt-9 px-4 shadow-lg z-50"
+      >
+        <View className="pb-3">
+          <Text className="text-xl font-extrabold">FlipNews</Text>
         </View>
 
-        <View style={{ paddingVertical: 8 }}>
+        <View className="py-2">
           {items.map((it) => (
             <TouchableOpacity
               key={it.id}
-              style={styles.item}
+              className="py-3 border-b border-gray-200"
               onPress={() => {
                 onNavigate && onNavigate(it.id);
                 onClose && onClose();
               }}
+              activeOpacity={0.75}
             >
-              <Text style={styles.itemText}>{it.label}</Text>
+              <Text className="text-base">{it.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -58,52 +71,3 @@ export default function SideMenu({ visible, onClose, onNavigate }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  root: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 9999,
-  },
-  overlay: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: '#00000066',
-  },
-  menu: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    bottom: 0,
-    width: MENU_WIDTH,
-    backgroundColor: '#fff',
-    paddingTop: 36,
-    paddingHorizontal: 16,
-    elevation: 6,
-    shadowColor: '#000',
-    shadowOpacity: 0.12,
-    shadowOffset: { width: 0, height: 6 },
-    shadowRadius: 12,
-  },
-  header: {
-    paddingBottom: 12,
-  },
-  brand: {
-    fontSize: 20,
-    fontWeight: '800',
-  },
-  item: {
-    paddingVertical: 12,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#eee',
-  },
-  itemText: {
-    fontSize: 16,
-  },
-});

@@ -1,65 +1,61 @@
 // src/components/ArticleModal.js
 import React from 'react';
-import { Modal, View, Text, Image, ScrollView, StyleSheet, TouchableOpacity, Linking } from 'react-native';
+import { Modal, View, Text, Image, ScrollView, TouchableOpacity, Linking } from 'react-native';
 
 export default function ArticleModal({ visible, article, onClose }) {
   if (!article) return null;
 
   const { title, image, summary, url, source, publishedAt } = article;
+  const date = publishedAt ? new Date(publishedAt).toLocaleString() : '';
 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={onClose} style={styles.close}>
-          <Text style={{ fontSize: 18 }}>✕</Text>
+      {/* Header */}
+      <View className="h-14 flex-row items-center justify-between px-3 border-b border-gray-200 bg-white">
+        <TouchableOpacity onPress={onClose} className="w-9 items-center justify-center">
+          <Text className="text-lg">✕</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Article</Text>
-        <View style={{ width: 36 }} />
+
+        <Text className="text-base font-extrabold">Article</Text>
+
+        {/* spacer to keep title centered */}
+        <View className="w-9" />
       </View>
 
-      <ScrollView contentContainerStyle={styles.container}>
-        {image ? <Image source={{ uri: image }} style={styles.image} resizeMode="cover" /> : <View style={[styles.image, styles.placeholder]}><Text>No image</Text></View>}
+      {/* Content */}
+      <ScrollView contentContainerStyle={{ paddingBottom: 40 }} className="p-3 bg-white">
+        {image ? (
+          <Image source={{ uri: image }} className="w-full h-56 rounded-md mb-3" resizeMode="cover" />
+        ) : (
+          <View className="w-full h-56 rounded-md mb-3 bg-gray-100 items-center justify-center">
+            <Text className="text-gray-600">No image</Text>
+          </View>
+        )}
 
-        <Text style={styles.title}>{title}</Text>
-        <View style={styles.meta}>
-          <Text style={styles.metaText}>{source ?? 'WorldNews'}</Text>
-          <Text style={styles.metaDot}> • </Text>
-          <Text style={styles.metaText}>{publishedAt ? new Date(publishedAt).toLocaleString() : ''}</Text>
+        <Text className="text-xl font-extrabold mb-2">{title}</Text>
+
+        <View className="flex-row items-center mb-3">
+          <Text className="text-xs text-gray-600">{source ?? 'WorldNews'}</Text>
+          <Text className="text-gray-600 mx-1">•</Text>
+          <Text className="text-xs text-gray-600">{date}</Text>
         </View>
 
-        <Text style={styles.body}>{(summary || '').replace(/<[^>]*>/g, '')}</Text>
+        <Text className="text-base leading-7 text-gray-900 mb-4">
+          {(summary || '').replace(/<[^>]*>/g, '')}
+        </Text>
 
         {url ? (
-          <TouchableOpacity style={styles.button} onPress={() => Linking.openURL(url)}>
-            <Text style={styles.buttonText}>Read full article</Text>
+          <TouchableOpacity
+            className="bg-blue-600 py-3 rounded-lg items-center"
+            onPress={() => {
+              Linking.openURL(url).catch(() => {});
+            }}
+            activeOpacity={0.85}
+          >
+            <Text className="text-white font-bold">Read full article</Text>
           </TouchableOpacity>
         ) : null}
       </ScrollView>
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  header: {
-    height: 56,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 12,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#eee',
-    backgroundColor: '#fff',
-  },
-  close: { width: 36, alignItems: 'center', justifyContent: 'center' },
-  headerTitle: { fontSize: 16, fontWeight: '700' },
-  container: { padding: 12, paddingBottom: 40, backgroundColor: '#fff' },
-  image: { width: '100%', height: 220, borderRadius: 8, marginBottom: 12 },
-  placeholder: { alignItems: 'center', justifyContent: 'center', backgroundColor: '#eceff1' },
-  title: { fontSize: 20, fontWeight: '800', marginBottom: 8 },
-  meta: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-  metaText: { fontSize: 12, color: '#666' },
-  metaDot: { color: '#666', marginHorizontal: 6 },
-  body: { fontSize: 16, lineHeight: 24, color: '#222', marginBottom: 18 },
-  button: { backgroundColor: '#0f62fe', paddingVertical: 12, borderRadius: 10, alignItems: 'center', marginTop: 8 },
-  buttonText: { color: '#fff', fontWeight: '700' },
-});
