@@ -7,7 +7,6 @@ import {
   FlatList,
   ActivityIndicator,
   Text,
-  Linking,
 } from 'react-native';
 import Header from '../components/Header';
 import CategoryTabs from '../components/CategoryTabs';
@@ -18,7 +17,7 @@ import { fetchWorldNews } from '../api/worldNewsApi';
 
 const DEFAULT_CATEGORIES = ['All', 'Technology', 'Business', 'Sports', 'Health', 'Entertainment'];
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) { // ← Add navigation prop
   const [items, setItems] = useState([]);
   const [category, setCategory] = useState('All');
   const [query, setQuery] = useState('');
@@ -69,6 +68,12 @@ export default function HomeScreen() {
   function onMenuPress() {
     setMenuOpen(true);
   }
+
+  // ← NEW: Add search handler
+  function onSearchPress() {
+    navigation.navigate('Search');
+  }
+
   function onNavigateFromMenu(id) {
     if (id === 'trending') {
       setCategory('All');
@@ -95,7 +100,10 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <Header onMenuPress={onMenuPress} />
+      <Header 
+        onMenuPress={onMenuPress} 
+        onSearchPress={onSearchPress} // ← Pass the handler
+      />
 
       {/* Search */}
       <View className="px-3 py-2 bg-white border-b border-gray-200">
