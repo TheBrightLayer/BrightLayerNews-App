@@ -56,10 +56,10 @@ export default function SideMenu({ visible, onClose, onNavigate }) {
     { id: 'bookmarks', label: 'Bookmarks' },
     { id: 'profile', label: 'Profile' },
     { id: 'notifications', label: 'Notifications' },
-    { id: 'rss', label: 'RSS Feeds' },
     { id: 'discover', label: 'Discover' },
     { id: 'dark', label: 'Dark Mode' },
     { id: 'settings', label: 'Settings' },
+    { id: 'signup', label: 'SignUp' },
   ];
 
   if (!visible && fadeAnim._value === 0) {

@@ -6,7 +6,15 @@ module.exports = {
   ],
   presets: [require('nativewind/preset')],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        // Custom dark mode colors
+        'dark-bg': '#0b1220',
+        'dark-card': '#07101a',
+        'dark-text': '#e6eef8',
+      },
+    },
   },
   plugins: [],
+  darkMode: 'class', // Enable class-based dark mode
 };
