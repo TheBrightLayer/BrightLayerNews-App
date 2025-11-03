@@ -10,6 +10,9 @@ import TrendingScreen from './src/screens/TrendingScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import SignupScreen from './src/screens/SignupScreen';
+import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen';
+import VerifyOtpScreen from './src/screens/VerifyOtpScreen';
+import ResetPasswordScreen from './src/screens/ResetPasswordScreen';
 
 import { ThemeProvider, ThemeContext } from './src/context/ThemeContext';
 
@@ -57,6 +60,9 @@ export default function App() {
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="SignUp" component={SignupScreen} />
+            <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+            <Stack.Screen name="VerifyOtp" component={VerifyOtpScreen} />
+            <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </ThemedShell>

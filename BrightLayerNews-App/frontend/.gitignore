@@ -3,11 +3,6 @@
 # Monorepo setup: ignore backend + its dependencies
 # ==========================================================
 
-# --- Ignore backend (since we have a separate branch/repo) ---
-../backend
-../backend/*
-../backend/node_modules
-
 # --- Dependencies ---
 node_modules/
 package-lock.json
@@ -47,7 +42,6 @@ Thumbs.db
 *.pem
 
 # --- Local environment files ---
-.env
 .env*.local
 
 # --- TypeScript build artifacts ---
