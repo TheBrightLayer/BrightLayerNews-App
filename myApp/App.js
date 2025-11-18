@@ -1,12 +1,13 @@
-import "nativewind";
-import { View, Text } from "react-native";
+import './global.css';
+import { SafeAreaView, StatusBar } from 'react-native';
+import HomeScreen from './src/screens/HomeScreen';
 
 export default function App() {
   return (
-    <View className="flex-1 items-center justify-center bg-blue-100">
-      <Text className="text-xl font-bold text-blue-700">
-        Expo Web + Tailwind ✅
-      </Text>
-    </View>
+    <SafeAreaView className="flex-1 bg-white">
+      {/* Optional: adjust the status bar style */}
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <HomeScreen />
+    </SafeAreaView>
   );
 }
